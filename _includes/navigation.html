@@ -9,10 +9,12 @@
 		<div class="collapse navbar-collapse flex-row-reverse" id="navbarNavAltMarkup">
 			<div class="navbar-nav">
 				{% for item in site.data.navigation %}
-					<a class="nav-link" href="{{item.link}}">{{ item.name }}</a>
+					<a class="nav-link" href="{{item.link}}"><i class="fas {{item.icon}}"></i>{{ item.name }}</a>
 				{% endfor %}
 
-				<a id="login-btn" class="logged-out nav-link" onclick="login()" type="button" href="#">Login</a>
+				<a id="login-btn" class="logged-out nav-link fw-bold" onclick="login()" type="button" href="#">
+					<i class="fas fa-sign-in-alt"></i> Login
+				</a>
 				<div class="dropdown logged-in">
 					<a class="nav-link dropdown-toggle fw-bold" id="account" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
 					<div class="dropdown-menu" aria-labelledby="account">

@@ -1,7 +1,14 @@
 - name: Pool
+  icon: fa-swimming-pool
   link: /#counts
-- name: How It Works
-  link: /how-it-works.html
-- name: Vote (DAO)
+- name: Vote
+  icon: fa-landmark
   link: /dao.html
+- name: Token
+  icon: fa-coins
+  link: /#counts
+- name: Learn
+  icon: fa-book
+  link: /learn.html
+
 

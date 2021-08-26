@@ -25,7 +25,7 @@ body {
   border: 1px solid white;
   width: 2px;
   height: 35px;
-  margin: 6px 0.6rem 0 0.6rem !important;
+  margin: 7px 0.6rem 0 0.6rem !important;
 }
 
 a, a:visited, a:hover {
@@ -153,6 +153,10 @@ ul{
   margin-top: 5px;
 }
 
+.nav-link .fas{
+  font-size: 16px !important;
+  margin-right: 6px;
+}
 
 /*--------------------------------------------------------------
 # Hero Section
