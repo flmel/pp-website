@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'dev-1625400784308-8795187'
+const CONTRACT_NAME = 'pool.pooltest.testnet'
 
 export function floor(value, decimals=2){
   value = parseFloat(String(value).replace(',', ''))
