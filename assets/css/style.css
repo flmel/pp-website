@@ -22,7 +22,7 @@ body {
 }
 
 .separator{
-  border: 1px solid white;
+  border: 1px solid aliceblue;
   width: 2px;
   height: 35px;
   margin: 7px 0.6rem 0 0.6rem !important;
@@ -1449,4 +1449,10 @@ section {
   #footer .footer-top .footer-info {
     margin: -20px 0 30px 0;
   }
+}
+
+.proposal {
+  background-color: #d2f0f9;
+  border: 1px solid aliceblue;
+  border-radius: 10px;
 }

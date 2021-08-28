@@ -1,6 +1,7 @@
 import {getConfig} from './aux.js'
 const nearConfig = getConfig('testnet')
 
+window.nearConfig = nearConfig
 window.nearApi = nearApi
 
 export function login() {
@@ -23,13 +24,13 @@ export async function initNEAR() {
   // Initializing our contract APIs by contract name and configuration.
   window.contract = await near.loadContract(
     nearConfig.DAOaddress,
-    {viewMethods: ['get_proposals'],
+    {viewMethods: ['get_proposals', 'get_policy'],
      changeMethods: ['act_proposal', 'add_proposal'],
      sender: window.walletAccount.accountId}
   );
 }
 
-export async function add_proposal(description, period_of_time_to_vote, kind){
+export async function add_proposal(description, kind){
   /* 
   add_proposal '{"proposal": {"description": "test", "submission_time":"60000000000",
                  "kind": {
@@ -37,12 +38,11 @@ export async function add_proposal(description, period_of_time_to_vote, kind){
                    {"member_id": "another-account.testnet", "role": "council"}}}}'
   */
   let one_near = nearApi.utils.format.parseNearAmount("1")
-  let submission_time = period_of_time_to_vote
 
   let proposal = {
-    proposal: {description:description,
-               submission_time:period_of_time_to_vote,
-               kind:kind}
+    proposal: {description: description,
+               submission_time: "604800000000000",
+               kind: kind}
   }
 
   const account = window.walletConnection.account()
@@ -70,4 +70,16 @@ export async function get_proposals(from_index, limit){
   }
   
   return info
+}
+
+export async function get_policy(){
+  let policy = await contract.get_policy()
+  policy.proposal_bond = nearApi.utils.format.formatNearAmount(policy.proposal_bond)
+  return policy
+}
+
+window.submit_proposal = function submit_proposal(){
+  const description = $('#e-description')[0].value
+  const kind = get_kind()
+  add_proposal(description, kind)
 }

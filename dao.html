@@ -2,6 +2,7 @@
 layout: default
 title: Pool Party - Home
 js_file: dao.js
+icon: fa-landmark
 ---
 
 <section id="hero">
@@ -14,79 +15,45 @@ js_file: dao.js
 
   {% include waves.html %}
 </section>
-<!-- End Hero -->
 
-<main id="main">
-  <!-- ======= Details Section ======= -->
-  <section id="details" class="details">
-    <div class="container">
-      <div class="row content">
-        <div class="col-md-4 text-center" data-aos="fade-right">
-          <ul id="proposals"></div>
-        </div>
-        <div class="col-md-8 p-4" data-aos="fade-up">
+<section id="main" class="details">
+  <div class="container">
 
-          <h3 id="p-title"></h3>
+    <div class="card mt-5 p-3">
+      <h1> DAO </h1>
+      <p>DAO: <span id="dao-address"></span></p>
+      <p>Bond: <span id="dao-bond"></span>N</p>
+      <p>Voting time: <span id="dao-time"></span></p>
+      <p>Council: <span id="dao-council"></span></p>
+    </div>
 
-          <form id="form">
-            <div id="kind"></div>
-            <hr>
+    <div class="text-center logged-out">
+      <a onclick="login()" href="#" class="logged-out">Login to Create a proposal</a>
+    </div>
 
-            <div class="form-group row">
-              <label for="p-description" class="col-sm-2 col-form-label">Description:</label>
-              <div class="col-sm-10">
-                <textarea class="form-control" id="p-description"></textarea>
-              </div>
-            </div>
+    <div class="logged-in">
+      
+      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#newProposal" aria-expanded="false" aria-controls="newProposal">
+        Create New Proposal
+      </button>
 
-            <div class="logged-in">
-              <!-- These fields are not necesary when creating a proposal -->
-              <div class="form-group row showing-proposal">
-                <label for="p-proposer" class="col-sm-2 col-form-label">Proposed by:</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="p-proposer">
-                </div>
-              </div>
+      <div class="collapse" id="newProposal">
+        <div class="m-3 p-3">
+          Create your proposal and submit it to be voted by the council
+          
+          <div class="my-3" id="e-kind"></div>
 
-              <div class="form-group row showing-proposal">
-                <label for="p-time" class="col-sm-2 col-form-label">Submited on:</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="p-time">
-                </div>
-              </div>
+          Please include a brief discussion on why this would be beneficial for the Pool Party ecosystem
+          <textarea class='form-control w-100 my-3' id="e-description" placeholder="Please add a brief description of your proposal"> </textarea>
 
-              <div class="form-group row showing-proposal">
-                <label for="p-votes" class="col-sm-2 col-form-label">Votes</label>
-                <div class="col-sm-10">
-                  <ul id="p-votes"></ul>
-                </div>
-              </div>
-
-              <button type="button" onclick="vote('VoteApprove')" class="showing-proposal btn btn-primary mb-2">Approve</button>
-              <button type="button" onclick="vote('VoteReject')" class="showing-proposal btn btn-primary mb-2">Reject</button>
-            </div>
-
-            <div class="logged-in">
-
-              <div class="form-group row creating-proposal">
-                <label for="p-submission_time" class="col-sm-2 col-form-label">Submission Time</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="p-submission_time">
-                </div>
-              </div>
-
-              <button type="button" onclick="submit_proposal()" class="creating-proposal btn btn-primary mb-2">Submit</button>
-            </div>
-
-            <div class="text-center logged-out text-lg-start">
-              <a onclick="login()" href="#" class="logged-out btn-get-started scrollto">Login to Vote</a>
-            </div>
-          </form>
-
+          <button type="button" onclick="submit_proposal()" class="creating-proposal btn btn-primary mb-2">Submit</button>
         </div>
       </div>
     </div>
-  </section>
-  <!-- End Details Section -->
 
-</main>
+    <h1 class="mt-5"> Proposals </h1>
+    <div class="row" id="existing-proposals">      
+      <!-- dao.js will fill this div with the proposals present in the dao -->
+    </div>
+  </div>
+</section>
