@@ -1,12 +1,12 @@
 - name: Pool
   icon: fa-swimming-pool
-  link: /#counts
+  link: /
 - name: Vote
   icon: fa-landmark
   link: /dao.html
 - name: Token
   icon: fa-coins
-  link: /#counts
+  link: /token.html
 - name: Learn
   icon: fa-book
   link: /learn.html
