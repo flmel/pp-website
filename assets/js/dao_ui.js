@@ -12,7 +12,12 @@ function form_group(label, id, value, editable){
 }
 
 const status2html = {'InProgress': '<span class="text-info"> Voting </span>',
-                     'Expired': '<span class="text-danger"> Expired </span>' }
+                     'Approved': '<span class="text-success"> Approved </span>',
+                     'Rejected': '<span class="text-danger"> Rejected </span>',
+                     'Removed': '<span class="text-danger"> Removed </span>',
+                     'Expired': '<span class="text-danger"> Expired </span>',
+                     'Moved': '<span class="text-info"> Moved </span>'
+                    }
 
 
 // Proposal Component
