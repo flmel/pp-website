@@ -11,9 +11,9 @@
 				{% for item in site.data.navigation %}
 					<a class="nav-link" href="{{item.link}}"><i class="fas {{item.icon}}"></i>{{ item.name }}</a>
 				{% endfor %}
-
+				<div  id="navbarNavAltMarkup" class="separator collapse show"></div>
 				<a id="login-btn" class="logged-out nav-link fw-bold" onclick="login()" type="button" href="#">
-					<i class="fas fa-sign-in-alt"></i> Login
+					<i class="fas {{page.icon}}"></i> Login
 				</a>
 				<div class="dropdown logged-in">
 					<a class="nav-link dropdown-toggle fw-bold" id="account" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
