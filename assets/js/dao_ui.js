@@ -1,7 +1,6 @@
 function sanitize(html){
   let doc = new DOMParser().parseFromString(html, 'text/html');
   let text = doc.body.textContent || "";
-  console.log(html, text)
   return text.replaceAll('"', "'")
 }
 

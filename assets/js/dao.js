@@ -54,15 +54,18 @@ async function flow(){
 
 function add_buttons_to_proposals(proposals){
     // Add buttons
-    const is_council = window.council.includes(window.walletAccount.accountId)
-    let disabled = (is_council)? '': 'disabled'
+    const accId = window.walletAccount.accountId
+    const is_council = window.council.includes(accId)
 
     for(let i=proposals.length-1; i>=0; i--){
       const proposal = proposals[i]
+      const voted = accId in proposal.votes
       let buttons = ''
-      if (proposal.status == 'InProgress'){
-        buttons += `<button ${disabled} onclick="vote(${proposal.id}, 'VoteApprove')" class="btn btn-primary mb-2">Approve</button>
-                    <button ${disabled} onclick="vote(${proposal.id}, 'VoteReject')" class="btn btn-danger mb-2">Reject</button>`
+      if (proposal.status == 'InProgress' ){
+        const disabled = (is_council && !voted)? '': 'disabled'
+        buttons += `<button ${disabled} onclick="vote(${proposal.id}, 'VoteApprove')" class="btn btn-success mb-2">Approve</button>
+                    <button ${disabled} onclick="vote(${proposal.id}, 'VoteReject')" class="btn btn-danger mb-2">Reject</button>
+                    <button ${disabled} onclick="vote(${proposal.id}, 'VoteRemove')" class="btn btn-secondary mb-2">Remove</button>`
       }
 
       $(`#p-buttons-${proposal.id}`).html(buttons)
