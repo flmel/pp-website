@@ -8,52 +8,69 @@ icon: fa-landmark
 <section id="hero">
   <div class="container">
     <div class="row justify-content-between">
-      <h1>Propose how the <span>Pool</span> works</h1>
-      <h2 class='mb-0'>Decide on how the prizes are distributed and used </h2>
+      <h1>Make the <span>Pool</span> yours</h1>
+      <h2 class='mb-0'>Vote, propose and decide on how the pool should be managed</h2>
     </div>
   </div>
 
-  {% include waves.html %}
+  {% include waves.html background="#f5f5ff" %}
 </section>
 
-<section id="main" class="details">
+<section id="dao" class="dao">
   <div class="container">
+    <div class="row justify-content-md-center">
 
-    <div class="card mt-5 p-3">
-      <h1> DAO </h1>
-      <p>DAO: <span id="dao-address"></span></p>
-      <p>Bond: <span id="dao-bond"></span>N</p>
-      <p>Voting time: <span id="dao-time"></span></p>
-      <p>Council: <span id="dao-council"></span></p>
-    </div>
-
-    <div class="text-center logged-out">
-      <a onclick="login()" href="#" class="logged-out">Login to Create a proposal</a>
-    </div>
-
-    <div class="logged-in">
-      
-      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#newProposal" aria-expanded="false" aria-controls="newProposal">
-        Create New Proposal
-      </button>
-
-      <div class="collapse" id="newProposal">
-        <div class="m-3 p-3">
-          Create your proposal and submit it to be voted by the council
-          
-          <div class="my-3" id="e-kind"></div>
-
-          Please include a brief discussion on why this would be beneficial for the Pool Party ecosystem
-          <textarea class='form-control w-100 my-3' id="e-description" placeholder="Please add a brief description of your proposal"> </textarea>
-
-          <button type="button" onclick="submit_proposal()" class="creating-proposal btn btn-primary mb-2">Submit</button>
+ <!--      <div class="col-lg-6">
+        <div class="dao-box">
+          <i class="fas fa-hand-paper"></i>
+          <div class="row align-items-center h-100">
+            <div class="text-center logged-out collapse">
+              <h3><span>Login to Create a proposal</span></h3>
+              <a onclick="login()" href="#" class="btn-get-started scrollto my-3">
+               Login with NEAR
+             </a>
+           </div>
+           <div id="newProposal" class="logged-in collapse">
+            <h3><span>Create your proposal</span></h3>
+              <div class="my-3" id="e-kind"></div>
+              <p>Please include a brief discussion on why this would be beneficial for the Pool Party ecosystem</p>
+              <textarea class='form-control w-100 my-3' id="e-description" placeholder="Please add a brief description of your proposal"> </textarea>
+              <small>After submitting, the proposal will be voted on by the council in a spance of <strong class="dao-time">7 days</strong>.</small>
+              <div class="text-center">
+                <a onclick="submit_proposal()" href="#" class="btn-get-started scrollto my-3 creating-proposal">
+               Submit Proposal
+             </a>
+              </div>
+          </div>
         </div>
-      </div>
-    </div>
 
+      </div>
+    </div> -->
+    <div class="col-lg-6">
+      <div class="dao-box">
+        <i class="fas fa-landmark"></i>
+        <div class="row">
+          <div class="text-center">
+            <h3 class="my-3"><span id="dao-address"></span></h3>
+            <p>The current bond is <span id="dao-bond"></span>, and the voting time for proposals is <span class="dao-time"></span>.</p>
+            <h3 class="my-3"><span>Council Members</span></h3>
+            <p id="dao-council"></p>
+           <a onclick="login()" href="#" class="btn-get-started scrollto my-3 logged-out">
+             Login with NEAR to create a proposal
+           </a>
+           <a type="button" class="btn-get-started scrollto my-3 logged-in-council" data-bs-toggle="modal" data-bs-target="#proposalModal">
+             Create a proposal
+           </a>
+         </div>           
+       </div>
+     </div>
+   </div>
+ </div>
     <h1 class="mt-5"> Proposals </h1>
     <div class="row" id="existing-proposals">      
       <!-- dao.js will fill this div with the proposals present in the dao -->
     </div>
   </div>
 </section>
+
+{% include proposal.html %}

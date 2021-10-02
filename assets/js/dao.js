@@ -8,8 +8,10 @@ async function get_and_display_policy(){
   const policy = await get_policy()
 
   $('#dao-address').html(window.nearConfig.DAOaddress)
-  $('#dao-bond').html(policy.proposal_bond)
-  $('#dao-time').html(policy.proposal_period)
+  $('#dao-bond').html(policy.proposal_bond+ " N")
+  // const daoTime = parseFloat(policy.proposal_period)
+  const daoTime = "7 days"
+  $('.dao-time').html(daoTime)
 
   // Get council from Roles object
   let council_html = ''
@@ -17,7 +19,7 @@ async function get_and_display_policy(){
   for(let i=0; i<policy.roles.length; i++){
     if(policy.roles[i].name == 'council'){
       window.council = policy.roles[i].kind.Group
-      council_html = council.join(', ')
+      council_html = council.join(' - ')
     }
   }
 
@@ -44,9 +46,15 @@ async function flow(){
 
   if (!window.walletAccount.accountId){
     $(".logged-in").hide()
+    $(".logged-out").show()
   }else{
+    $(".logged-in").show()
+    
     $(".logged-out").hide()
     $('#account').html(window.walletAccount.accountId)
+    // if () check if council member
+
+    $(".logged-in-council").show()
     create_selector('e-kind')
     add_buttons_to_proposals(proposals)
   }
