@@ -3,14 +3,17 @@ import {initNEAR, login, logout, add_proposal,
 
 import {create_selector, change_kind, get_kind, proposal_to_html} from './dao_ui.js'
 
+// var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(dayjs_plugin_relativeTime)
+
 
 async function get_and_display_policy(){
   const policy = await get_policy()
 
   $('#dao-address').html(window.nearConfig.DAOaddress)
   $('#dao-bond').html(policy.proposal_bond+ " N")
-  // const daoTime = parseFloat(policy.proposal_period)
-  const daoTime = "7 days"
+  const seconds = parseFloat(policy.proposal_period)/1000000000
+  const daoTime = dayjs().to(dayjs().add(seconds,'second'),true)
   $('.dao-time').html(daoTime)
 
   // Get council from Roles object
