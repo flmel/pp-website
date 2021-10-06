@@ -29,17 +29,22 @@ async function get_and_display_policy(){
   $('#dao-council').html(council_html)
 }
 
+
+
 async function get_and_display_proposals(){
   console.log("Getting last 10 proposals from the DAO - VIEW")
 
   let proposals = await get_proposals(0, 10)
 
-  let components = ''
-  for(let i=proposals.length-1; i>=0; i--){
-    components += proposal_to_html(proposals[i])
+  // let components = ''
+  for(let i=0; i<proposals.length; i++){
+    // components += proposal_to_html(proposals[i])
+    const component = proposal_to_html(proposals[i])
+    
+    $('#existing-proposals').append(component)
   }
 
-  $('#existing-proposals').html(components)
+  // $('#existing-proposals').html(components)
   return proposals
 }
 
