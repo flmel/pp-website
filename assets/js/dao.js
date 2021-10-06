@@ -55,14 +55,15 @@ async function flow(){
   if (!window.walletAccount.accountId){
     $(".logged-in").hide()
     $(".logged-out").show()
+    $(".logged-in-council").hide()
   }else{
     $(".logged-in").show()
     
     $(".logged-out").hide()
     $('#account').html(window.walletAccount.accountId)
-    // if () check if council member
-
-    $(".logged-in-council").show()
+    if (!council.includes(walletAccount.accountId)){
+      $(".logged-in-council").hide()
+    }
     create_selector('e-kind')
     add_buttons_to_proposals(proposals)
   }
@@ -102,6 +103,7 @@ window.onload = function(){
 }
 
 window.vote = async function vote(id, action){
+  console.log(id)
   try{
     await act_proposal(id, action)
     window.location.replace(window.location.origin + window.location.pathname)

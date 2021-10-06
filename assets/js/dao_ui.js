@@ -109,7 +109,6 @@ class FunctionCall{
     if (args!=""){
       args = JSON.parse(args)[this.param];
     }
-    console.log(this.titleString)
     return this.titleString.replace(this.param,args);
   }
 
@@ -248,7 +247,14 @@ const status2html = {'InProgress': '<span class="text-info"> Voting </span>',
                      'Expired': '<span class="text-danger"> Expired </span>',
                      'Moved': '<span class="text-info"> Moved </span>'
                     }
-
+const statusColor ={
+  'InProgress': 'icon-green',
+ 'Approved': 'icon-pink',
+ 'Rejected': 'icon-blue',
+ 'Removed': 'icon-black',
+ 'Expired': 'icon-black',
+ 'Moved': 'icon-black'
+}
 
 
 function getProposalTitle(proposal){
@@ -265,12 +271,6 @@ export function proposal_to_html(proposal){
   // Compute remainign time from proposal (TODO)
   const remaining = 'time-remaining'
 
-  // Get votes
-  let votes = ''  
-  for(const k in proposal.votes){
-    votes += `<li> ${k}: ${proposal.votes[k]} </li>`
-  }
-
   // Ask the Kind to give the right html
   let pname = Object.keys(proposal.kind)[0].toString()
   if (pname == 'FunctionCall'){
@@ -282,38 +282,56 @@ export function proposal_to_html(proposal){
 
   const component = $('.proposal-template').clone()
   component.removeClass('proposal-template')
-  component.removeClass('collapse')
+  
   component.find('.proposal-icon').addClass(proposalMeta.icon)
+  component.find('.proposal-icon').addClass(statusColor[proposal.status])
   component.find('.proposal-title').html(proposalMeta.extractTitle(proposal))
+  
   component.find('.proposal-description').html(sanitize(proposal.description))
+  component.find('.proposal-raw').html(JSON.stringify(proposal.kind,null,2))
+  console.log(proposal)
+  const submission_time = dayjs.unix(proposal.submission_time).format('DD/MM/YYYY')
+  component.find('.submission-time').html(submission_time)
+  component.find('.proposer').html(proposal.proposer)
+  component.find('.proposal-status').html(proposal.status)
+
+  
+  component.find('.btn-vote').prop('proposal',proposal.id)
+  component.find('.votes').attr('id',`votes-${proposal.id}`)
+  component.find('.see-all-votes').attr('data-bs-target',`#votes-${proposal.id}`)
+
+  // Get votes
+  let votes = {yes:[],no:[]}
+  let votesList = ""
+  for(const k in proposal.votes){
+    const key = proposal.votes[k] == 'Approve' ? 'yes' : 'no'
+    votes[key].push(k)
+    votesList+=`<li><strong>${k}:</strong> ${proposal.votes[k]}</li>`
+  }
+  component.find('.votes').html(`<ul>${votesList}</ul>`)
+
+  const yesVotes = Math.trunc(votes.yes.length*100/council.length)
+  const noVotes = Math.trunc(votes.no.length*100/council.length)
+  const pendingVotes = 100-yesVotes-noVotes
+
+  component.find('.progress-yes').css('width',`${yesVotes}%`)
+  component.find('.progress-yes').html(`<strong>${yesVotes}% Yes</strong>`)
+  component.find('.progress-no').css('width',`${noVotes}%`)
+  component.find('.progress-no').html(`<strong>${noVotes}% No</strong>`)
+  
+  if (proposal.status != 'InProgress'){
+    component.find('.voting').addClass('d-none')
+    component.find('.progress-pending').css('width',`${pendingVotes}%`)
+    component.find('.progress-pending').removeClass('bg-green')
+    component.find('.progress-pending').addClass('bg-black')
+    component.find('.progress-pending').html(`<strong>${pendingVotes}% Not Casted</strong>`)
+  } else {
+    component.find('.progress-pending').css('width',`${pendingVotes}%`)
+    component.find('.progress-pending').html(`<strong>${pendingVotes}% Pending</strong>`)
+    
+  }
+
+  component.removeClass('collapse')
 
   return component
-
-  return `
-  <div class="col-md-5 p-4 m-3 proposal" data-aos="fade-up">
-    <div class="row">
-      <div class="col-6"> <p id="p-id-status">${status2html[proposal.status]}</p> </div>
-      <div class="col-6 text-end"> <p id="p-time">${remaining}</p> </div>
-    </div>
-
-    <h4 id="p-title">#${proposal.id}: ${pname}</h4>
-    <div id="p-kind">${kind_html}</div>
-
-    <hr>
-
-    ${html_form_group("Proposer", "p-proposer", proposal.proposer)}
-    <p> Description: ${sanitize(proposal.description)} </p>
-
-    <div class="logged-in">
-
-      <h6>Votes</h6>
-      <div class="col-sm-10">
-        <ul id="p-votes">${votes}</ul>
-      </div>
-
-      <div id="p-buttons-${proposal.id}"></div>
-
-    </div>
-  </div>
-  `
 }

@@ -21,6 +21,8 @@ body {
   font-size: 20px;
 }
 
+
+
 .separator{
   border: 1px solid aliceblue;
   width: 2px;
@@ -228,6 +230,32 @@ ul{
 
 .btn-get-started:hover {
   background: #25c0e1;
+}
+
+.btn-vote {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 50px;
+  transition: 0.5s;
+  color: #fff;
+  background: #f26f8d;
+  margin-top: 5px;
+}
+
+.btn-vote:hover {
+  background: #7ceec6;
+}
+
+.btn-blue {
+  background: #25c0e1;
+}
+
+.btn-black {
+  background: #000000;
 }
 
 #hero .animated {
@@ -512,6 +540,39 @@ section {
   border-color: #f26f8d;
 }
 
+.bg-blue {
+  background-color: #52c8ea !important;
+}
+
+.bg-pink {
+  background-color: #f26f8d !important;
+}
+
+.bg-black {
+  background-color: #000000 !important;
+}
+
+.bg-green {
+  background-color: #7ceec6 !important;
+}
+
+.icon-pink {
+  background: #f26f8d !important;
+}
+
+.icon-blue {
+  background: #52c8ea !important;
+}
+
+.icon-green {
+  background: #7ceec6 !important;
+}
+
+.icon-black {
+  background: #000000 !important;
+}
+
+
 .about .icon-box:hover .icon i {
   color: #fff;
 }
@@ -756,6 +817,12 @@ section {
   color: #52c8ea;
 }
 
+.raw-code {
+  text-align: left !important;
+  background: #f5f5ff;
+  font-size: 14px;
+}
+
 .dao-box p {
   padding: 0;
   margin: 0;
@@ -766,6 +833,10 @@ section {
 small {
   font-size: 14px;
   font-style: italic;
+}
+
+.text-pink {
+  color: #f26f8d;
 }
 
 .text-blue {

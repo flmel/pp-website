@@ -1,16 +1,37 @@
-<div class="col-lg-4 my-4 proposal-template collapse">
+<div class="col-lg-6 my-4 proposal-template collapse">
   <div class="dao-box">
     <i class="fas proposal-icon"></i>
     <div class="row">
       <div class="text-center">
         <h5 class="my-3 proposal-title"></h5>
         <p class="proposal-description">The current bond is <span id="dao-bond"></span>, and the voting time for proposals is <span class="dao-time"></span>.</p>
-        <h3 class="my-3"><span>Council Members</span></h3>
-        <p id="dao-council"></p>
-        
-        <a type="button" class="btn-get-started scrollto my-3 logged-in-council" data-bs-toggle="modal" data-bs-target="#proposalModal">
-         Create a proposal
+        <div class="raw-code my-3">
+          <pre><code class="proposal-raw"></code></pre>
+        </div>
+        <h4 class="mt-3 text-blue">Votes</h4>
+        <div class="progress mt-3">
+          <div class="progress-yes progress-bar progress-bar-striped bg-pink" role="progressbar"></div>
+          <div class="progress-no progress-bar progress-bar-striped bg-blue" role="progressbar"></div>
+          <div class="progress-pending progress-bar progress-bar-striped bg-green" role="progressbar"></div>         
+        </div>
+        <div class="voting btn-group logged-in-council mt-3" role="group" aria-label="Basic example">
+          <a type="button" onClick="vote(this.proposal,'VoteApprove')" class="btn btn-vote">
+           Approve
+          </a>
+          <a type="button" onClick="vote(this.proposal,'VoteReject')" class="btn btn-vote btn-blue">
+           Reject
+          </a>
+          <a type="button" onClick="vote(this.proposal,'VoteRemove')" class="btn btn-vote btn-black">
+           Remove
+          </a>
+        </div>
+        <div>
+          <p class="votes mt-3 collapse"></p>
+          <a type="button" data-bs-toggle="collapse" class="see-all-votes btn-vote scrollto logged-in mt-3">
+         See all votes
         </a>
+        </div>
+        <p class="mt-3" style="font-style:italic;font-size: 14px;">This proposal submitted on <span class="submission-time"></span> by <span class="proposer"></span> is <span class="proposal-status"></span>.</p>
       </div>           
     </div>
   </div>
