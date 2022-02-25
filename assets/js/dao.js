@@ -3,13 +3,18 @@ import {initNEAR, login, logout, add_proposal,
 
 import {create_selector, change_kind, get_kind, proposal_to_html} from './dao_ui.js'
 
+// var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(dayjs_plugin_relativeTime)
+
 
 async function get_and_display_policy(){
   const policy = await get_policy()
 
   $('#dao-address').html(window.nearConfig.DAOaddress)
-  $('#dao-bond').html(policy.proposal_bond)
-  $('#dao-time').html(policy.proposal_period)
+  $('#dao-bond').html(policy.proposal_bond+ " N")
+  const seconds = parseFloat(policy.proposal_period)/1000000000
+  const daoTime = dayjs().to(dayjs().add(seconds,'second'),true)
+  $('.dao-time').html(daoTime)
 
   // Get council from Roles object
   let council_html = ''
@@ -17,24 +22,29 @@ async function get_and_display_policy(){
   for(let i=0; i<policy.roles.length; i++){
     if(policy.roles[i].name == 'council'){
       window.council = policy.roles[i].kind.Group
-      council_html = council.join(', ')
+      council_html = council.join(' - ')
     }
   }
 
   $('#dao-council').html(council_html)
 }
 
+
+
 async function get_and_display_proposals(){
   console.log("Getting last 10 proposals from the DAO - VIEW")
 
   let proposals = await get_proposals(0, 10)
 
-  let components = ''
-  for(let i=proposals.length-1; i>=0; i--){
-    components += proposal_to_html(proposals[i])
+  // let components = ''
+  for(let i=0; i<proposals.length; i++){
+    // components += proposal_to_html(proposals[i])
+    const component = proposal_to_html(proposals[i])
+    
+    $('#existing-proposals').append(component)
   }
 
-  $('#existing-proposals').html(components)
+  // $('#existing-proposals').html(components)
   return proposals
 }
 
@@ -44,9 +54,16 @@ async function flow(){
 
   if (!window.walletAccount.accountId){
     $(".logged-in").hide()
+    $(".logged-out").show()
+    $(".logged-in-council").hide()
   }else{
+    $(".logged-in").show()
+    
     $(".logged-out").hide()
     $('#account').html(window.walletAccount.accountId)
+    if (!council.includes(walletAccount.accountId)){
+      $(".logged-in-council").hide()
+    }
     create_selector('e-kind')
     add_buttons_to_proposals(proposals)
   }
@@ -86,6 +103,7 @@ window.onload = function(){
 }
 
 window.vote = async function vote(id, action){
+  console.log(id)
   try{
     await act_proposal(id, action)
     window.location.replace(window.location.origin + window.location.pathname)

@@ -26,7 +26,7 @@ icon: fa-swimming-pool
     </div>
   </div>
 
-  {% include waves.html %}
+  {% include waves.html background="#fff" %}
 </section>
 <!-- End Hero -->
 
@@ -104,7 +104,7 @@ icon: fa-swimming-pool
         <h1 class="text-center" style="color:#52c8ea"> Your Stats </h1>
           <div class="col-lg-6 col-md-8 mt-2 content">
             <div class="count-box text-center">
-             <h3 class="text-center"> Logging to join the pool </h3>
+             <h3> Login to join the pool </h3>
              <a onclick="login()" href="#" class="logged-out btn-get-started scrollto">
                Login with NEAR
              </a>
@@ -168,8 +168,8 @@ icon: fa-swimming-pool
             <span>Withdraw <span class="user-unstaked">
               <span class="fas fa-sync fa-spin"></span></span> NEARS
             </span>
-            <p id="withdraw-msg">You didn't asked to withdraw any NEARs</p>
-            <p id="withdraw-countdown" style="display:none;">
+            <p style="font-style: italic;" id="withdraw-msg">You didn't asked to withdraw any NEARs</p>
+            <p style="font-style: italic;" id="withdraw-countdown" style="display:none;">
               Your NEARs will be ready in less than <span id="withdraw-time-left"></span>
             </p>
             <a type="button" id="withdraw_btn" class="btn-get-started scrollto my-3"
