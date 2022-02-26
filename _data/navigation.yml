@@ -7,8 +7,3 @@
 - name: Token
   icon: fa-coins
   link: /token.html
-- name: Learn
-  icon: fa-book
-  link: /learn.html
-
-

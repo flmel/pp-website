@@ -22,7 +22,7 @@ sass:
   sass_dir: assets/css
 
 title: Pool Party - A no-loss money game
-email: gagdiez.c@gmail.com
+email: info@poolparty.ar
 description: A no-loss money game powered by the NEAR blockchain
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com

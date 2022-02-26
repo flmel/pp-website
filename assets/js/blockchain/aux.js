@@ -1,4 +1,6 @@
-const CONTRACT_NAME = 'pool.pooltest.testnet'
+const CONTRACT_NAME = 'pool4.pool-party.testnet'
+const DAO_ADDRESS = 'genesis.dao3.pool-party.testnet'
+const TOKEN_ADDRESS = 'token.pool-party.testnet'
 
 export function floor(value, decimals=2){
   value = parseFloat(String(value).replace(',', ''))
@@ -10,61 +12,32 @@ export function floor(value, decimals=2){
 export function getConfig(env) {
   switch (env) {
 
-  case 'production':
-  case 'mainnet':
-    return {
-      networkId: 'mainnet',
-      nodeUrl: 'https://rpc.mainnet.near.org',
-      contractName: CONTRACT_NAME,
-      DAOaddress: 'genesis.dao.poolparty.near',
-      TOKENaddress: 'token.poolparty.near',
-      walletUrl: 'https://wallet.near.org',
-      helperUrl: 'https://helper.mainnet.near.org',
-      explorerUrl: 'https://explorer.mainnet.near.org',
-    }
-  case 'development':
-  case 'testnet':
+  case 'pool':
     return {
       networkId: 'testnet',
       nodeUrl: 'https://rpc.testnet.near.org',
       contractName: CONTRACT_NAME,
-      DAOaddress: 'genesis.dao.pooltest.testnet',
-      TOKENaddress: 'token.pooltest.testnet',
       walletUrl: 'https://wallet.testnet.near.org',
       helperUrl: 'https://helper.testnet.near.org',
       explorerUrl: 'https://explorer.testnet.near.org',
     }
-  case 'betanet':
+  case 'dao':
     return {
-      networkId: 'betanet',
-      nodeUrl: 'https://rpc.betanet.near.org',
-      contractName: CONTRACT_NAME,
-      walletUrl: 'https://wallet.betanet.near.org',
-      helperUrl: 'https://helper.betanet.near.org',
-      explorerUrl: 'https://explorer.betanet.near.org',
+      networkId: 'testnet',
+      nodeUrl: 'https://rpc.testnet.near.org',
+      contractName: DAO_ADDRESS,
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
     }
-  case 'local':
+  case 'token':
     return {
-      networkId: 'local',
-      nodeUrl: 'http://localhost:3030',
-      keyPath: `${process.env.HOME}/.near/validator_key.json`,
-      walletUrl: 'http://localhost:4000/wallet',
-      contractName: CONTRACT_NAME,
-    }
-  case 'test':
-  case 'ci':
-    return {
-      networkId: 'shared-test',
-      nodeUrl: 'https://rpc.ci-testnet.near.org',
-      contractName: CONTRACT_NAME,
-      masterAccount: 'test.near',
-    }
-  case 'ci-betanet':
-    return {
-      networkId: 'shared-test-staging',
-      nodeUrl: 'https://rpc.ci-betanet.near.org',
-      contractName: CONTRACT_NAME,
-      masterAccount: 'test.near',
+      networkId: 'testnet',
+      nodeUrl: 'https://rpc.testnet.near.org',
+      contractName: TOKEN_ADDRESS,
+      walletUrl: 'https://wallet.testnet.near.org',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://explorer.testnet.near.org',
     }
   default:
     throw Error(`Unconfigured environment '${env}'. Can be configured in src/config.js.`)

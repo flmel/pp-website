@@ -1,6 +1,6 @@
 import {initNEAR, login, logout, add_proposal,
         get_policy, get_proposals, act_proposal} from './blockchain/dao.js'
-
+import { getConfig } from './blockchain/aux.js'
 import {create_selector, change_kind, get_kind, proposal_to_html} from './dao_ui.js'
 
 // var relativeTime = require('dayjs/plugin/relativeTime')
@@ -10,7 +10,7 @@ dayjs.extend(dayjs_plugin_relativeTime)
 async function get_and_display_policy(){
   const policy = await get_policy()
 
-  $('#dao-address').html(window.nearConfig.DAOaddress)
+  $('#dao-address').html(getConfig('dao').contractName)
   $('#dao-bond').html(policy.proposal_bond+ " N")
   const seconds = parseFloat(policy.proposal_period)/1000000000
   const daoTime = dayjs().to(dayjs().add(seconds,'second'),true)

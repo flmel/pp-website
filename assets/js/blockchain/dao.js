@@ -1,11 +1,11 @@
 import {getConfig} from './aux.js'
-const nearConfig = getConfig('testnet')
 
-window.nearConfig = nearConfig
+const nearConfig = getConfig('dao')
+
 window.nearApi = nearApi
 
 export function login() {
-  walletConnection.requestSignIn(nearConfig.DAOaddress, 'Pool Party - DAO');
+  walletConnection.requestSignIn(nearConfig.contractName, 'Pool Party - DAO');
 }
 
 export function logout() {
@@ -15,15 +15,15 @@ export function logout() {
 
 export async function initNEAR() {
   // Initializing connection to the NEAR node.
-  window.near = await nearApi.connect(Object.assign(nearConfig, {deps:{keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore()}}));
+  const near = await nearApi.connect(Object.assign(nearConfig, {deps:{keyStore: new nearApi.keyStores.BrowserLocalStorageKeyStore()}}));
 
   // Needed to access wallet login
-  window.walletConnection = await new nearApi.WalletConnection(window.near, nearConfig.DAOaddress)
+  window.walletConnection = await new nearApi.WalletConnection(near, nearConfig.contractName)
   window.walletAccount = walletConnection.account()
 
   // Initializing our contract APIs by contract name and configuration.
   window.contract = await near.loadContract(
-    nearConfig.DAOaddress,
+    nearConfig.contractName,
     {viewMethods: ['get_proposals', 'get_policy'],
      changeMethods: ['act_proposal', 'add_proposal'],
      sender: window.walletAccount.accountId}
@@ -73,7 +73,7 @@ export async function get_proposals(from_index, limit){
 }
 
 export async function get_policy(){
-  let policy = await contract.get_policy()
+  let policy = await window.contract.get_policy()
   policy.proposal_bond = nearApi.utils.format.formatNearAmount(policy.proposal_bond)
   return policy
 }

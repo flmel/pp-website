@@ -1,6 +1,6 @@
 import {initNEAR, login, logout, get_pool_info, get_account,
         stake, unstake, withdraw, raffle, update_prize,
-        get_winners, floor, interact_external} from './blockchain/pool.js'
+        get_last_winners, floor, interact_external} from './blockchain/pool.js'
 
 
 async function get_and_display_pool_info(){
@@ -15,8 +15,8 @@ async function get_and_display_pool_info(){
     $(this).text( event.strftime('%H:%M:%S') );
   });
 
-  console.log("Getting winners - VIEW")  
-  let winners = await get_winners()
+  console.log("Getting winners - VIEW")
+  let winners = await get_last_winners()
 
   $('#winners').html('')
   for (var i = 0; i < winners.length; i++) {
@@ -32,12 +32,12 @@ async function login_flow(){
   $('#account').html(window.walletAccount.accountId)
   get_and_display_user_info()
 
+  console.log("Asking pool to update prize")
+  await update_prize()
+
   if(pool.next_prize_tmstmp < Date.now() && pool.total_staked > 0){
     console.log("Asking pool to make the raffle")
     await raffle()
-  }else{
-    console.log("Asking pool to update prize")
-    await update_prize()
   }
 
   if(pool.withdraw_ready){
@@ -80,7 +80,7 @@ async function get_and_display_user_info(){
     $('#withdraw-msg').hide()
     $('#withdraw-countdown').show()
 
-    $("#withdraw-time-left").html(user.available_when*3 + " Days")
+    $("#withdraw-time-left").html(user.available_when*2 + " Days")
   }
 
   if(user.available){
@@ -101,6 +101,12 @@ async function flow(){
 }
 
 window.buy_tickets = function(){
+  const hminput = $("#how-much-input")[0]
+  if(!hminput.checkValidity()){
+    hminput.reportValidity()
+    return
+  }
+
   const toStake = floor($("#how-much-input").val());
   if (!isNaN(toStake)){
     $('#buy-btn').html('<span class="fas fa-sync fa-spin text-white"></span>')
@@ -108,16 +114,21 @@ window.buy_tickets = function(){
   }
 }
 
-window.leave_pool = async function(){
+window.return_ticket = async function(){
   if(window.user.staked_balance > 0){
     const amount = floor($("#exchange-input").val());
-    if (!isNaN(amount)){
-      $('.user-staked').html('<span class="fas fa-sync fa-spin"></span>')
-      const result = await unstake(amount);
-      if(result){
-        get_and_display_user_info()
-        get_and_display_pool_info()
-      }
+
+    const einput = $("#exchange-input")[0]
+    if(!einput.checkValidity()){
+      einput.reportValidity()
+      return
+    }
+
+    $('.user-staked').html('<span class="fas fa-sync fa-spin"></span>')
+    const result = await unstake(amount);
+    if(result){
+      get_and_display_user_info()
+      get_and_display_pool_info()
     }
   }
 }

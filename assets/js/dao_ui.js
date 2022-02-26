@@ -1,3 +1,5 @@
+import {getConfig} from './blockchain/aux.js'
+
 function sanitize(html){
   let doc = new DOMParser().parseFromString(html, 'text/html');
   let text = doc.body.textContent || "";
@@ -167,7 +169,7 @@ const Transfer = new ProposalKind(
   'Transfer', 
   ['Token', 'To', 'Amount'], ['token_id', 'receiver_id', "amount"], 
   `Grant <span>receiver_id</span> the requested <span>amount</span> N.`,
-  [window.nearConfig.TOKENaddress, '', '']
+  [getConfig('token').contractName, '', '']
 )
 
 const ChangeMaxUsers = new FunctionCall(
