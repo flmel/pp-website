@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'pool4.pool-party.testnet'
+const CONTRACT_NAME = 'pool5.pool-party.testnet'
 const DAO_ADDRESS = 'genesis.dao3.pool-party.testnet'
 const TOKEN_ADDRESS = 'token.pool-party.testnet'
 
