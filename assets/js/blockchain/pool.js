@@ -79,7 +79,7 @@ export async function get_pool_info(){
   let info = await contract.get_pool_info()
   info.total_staked = floor(nearApi.utils.format.formatNearAmount(info.total_staked))
   info.reserve = floor(nearApi.utils.format.formatNearAmount(info.reserve))
-  info.prize = floor(nearApi.utils.format.formatNearAmount(info.prize))
+  info.prize = floor(nearApi.utils.format.formatNearAmount(info.prize)*.95)
   info.next_prize_tmstmp = (info.next_prize_tmstmp/1000000).toFixed(0)
   return info  
 }
