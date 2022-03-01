@@ -86,9 +86,11 @@ export async function get_pool_info(){
 
 export async function get_last_winners(){
   let imax = await contract.number_of_winners()
+  console.log(imax)
   let imin = (imax >= 10)? imax - 10: 0
 
-  let info = await contract.get_winners({from:imax, until:imin})
+  let info = await contract.get_winners({from:imin, until:imax})
+  console.log(info)
 
   for(let i=0; i<info.length;i++){
     info[i].amount = floor(nearApi.utils.format.formatNearAmount(info[i].amount))
