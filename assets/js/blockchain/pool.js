@@ -100,8 +100,8 @@ export async function update_prize(){
   let result = await contract.account.functionCall(
     nearConfig.contractName, 'update_prize', {}, 60000000000000, 0
   )
-  let succeed = nearApi.providers.getTransactionLastResult(result)
-  return succeed
+  let prize = nearApi.providers.getTransactionLastResult(result)
+  return floor(nearApi.utils.format.formatNearAmount(prize))
 }
 
 export async function raffle(){

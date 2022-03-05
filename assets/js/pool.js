@@ -3,52 +3,6 @@ import {initNEAR, login, logout, get_pool_info, get_account,
         get_last_winners, floor, interact_external} from './blockchain/pool.js'
 
 
-async function get_and_display_pool_info(){
-  console.log("Getting information from the pool - VIEW")
-
-  window.pool = await get_pool_info()
-  
-  $('.pool-tickets').html(floor(pool.total_staked - pool.reserve))
-  $('.pool-prize').html(pool.prize)
-
-  $("#time-left").countdown(pool.next_prize_tmstmp, function(event) {
-    $(this).text( event.strftime('%H:%M:%S') );
-  });
-
-  console.log("Getting winners - VIEW")
-  let winners = await get_last_winners()
-
-  $('#winners').html('')
-  for (var i = 0; i < winners.length; i++) {
-    $('#winners').append(
-      `<li class="row">
-        <div class="col-8 text-start">${winners[i].account_id}</div>
-        <div class="col-4 text-end">${winners[i].amount} N  </div>
-       </li>`);
-  }
-}
-
-async function login_flow(){
-  $('#account').html(window.walletAccount.accountId)
-  get_and_display_user_info()
-
-  console.log("Asking pool to update prize")
-  await update_prize()
-
-  if(pool.next_prize_tmstmp < Date.now() && pool.total_staked > 0){
-    console.log("Asking pool to make the raffle")
-    await raffle()
-  }
-
-  if(pool.withdraw_ready){
-    console.log("Interacting with external pool")
-    await interact_external()
-  }
-
-  get_and_display_user_info()
-  get_and_display_pool_info()
-}
-
 async function get_and_display_user_info(){
   // reset ui
   const spin = '<span class="fas fa-sync fa-spin"></span>'
@@ -64,14 +18,6 @@ async function get_and_display_user_info(){
   window.user = await get_account(window.walletAccount.accountId)
   $('.user-staked').html(user.staked_balance)
   $('.user-unstaked').html(user.unstaked_balance)
-  
-  if(user.staked_balance > 0){
-    let odds = user.staked_balance / (pool.total_staked - pool.reserve)
-    if(odds < 0.01){ odds = "< 0.01" }else{ odds = odds.toFixed(2) }
-    $('#user-odds').html(odds)
-  }else{
-    $('#user-odds').html(0)
-  }
 
   if(user.staked_balance > 0){$('#btn-leave').show()}
 
@@ -87,16 +33,88 @@ async function get_and_display_user_info(){
     $('#withdraw-msg').html("You can withdraw your NEAR!");
     $('#withdraw_btn').show()
   }
+
+  if(user.staked_balance > 0){
+    const pool = await get_pool_info()
+    let odds = user.staked_balance / (pool.total_staked - pool.reserve)
+    if(odds < 0.01){ odds = "< 0.01" }else{ odds = odds.toFixed(2) }
+    $('#user-odds').html(odds)
+  }else{
+    $('#user-odds').html(0)
+  }
 }
 
-async function flow(){
-  await get_and_display_pool_info()
-
+function flow(){
   if (!window.walletAccount.accountId){
-    $(".logged-in").hide()
+    not_logged_in_flow()
   }else{
-    $(".logged-out").hide()
-    login_flow()
+    logged_in_flow()
+  }
+
+  console.log("Getting winners - VIEW")
+  get_last_winners().then((winners) => show_winners(winners))
+}
+
+async function not_logged_in_flow(){
+  $(".logged-in").hide()
+  const pool = await get_pool_info()
+  show_pool_info(pool)
+}
+
+async function logged_in_flow(){
+  $(".logged-out").hide()
+ 
+  $('#account').html(window.walletAccount.accountId)
+
+  let pool = await get_pool_info()
+
+  if(pool.next_prize_tmstmp < Date.now() && pool.total_staked > 0){
+    console.log("Asking pool to update prize")
+    await update_prize()
+
+    console.log("Asking pool to make the raffle")
+    await raffle()
+
+    pool = await get_pool_info()
+  }else{
+    console.log("Asking pool to update prize")
+    update_prize()
+    .then((prize) => $('.pool-prize').text(floor(prize)))
+  }
+
+  if(pool.withdraw_ready){
+    console.log("Interacting with external pool")
+    interact_external()
+  }
+
+  show_pool_info(pool)
+  get_and_display_user_info()
+}
+
+function show_pool_info(pool){
+  $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
+  $('.pool-prize').text(floor(pool.prize))
+
+  $("#time-left").countdown(pool.next_prize_tmstmp, {elapse:true})
+  .on('update.countdown', (event) => update_counter(event))
+}
+
+function show_winners(winners){
+  $('#winners').html('')
+  for (var i = 0; i < winners.length; i++) {
+    $('#winners').append(
+      `<li class="row">
+        <div class="col-8 text-start">${winners[i].account_id}</div>
+        <div class="col-4 text-end">${winners[i].amount} N  </div>
+       </li>`);
+  }
+}
+
+function update_counter(event){
+  if (event.elapsed) {
+    $("#time-left").text( event.strftime('-%H:%M:%S') );
+  } else {
+    $("#time-left").text( event.strftime('%H:%M:%S') );
   }
 }
 
@@ -128,7 +146,7 @@ window.return_ticket = async function(){
     const result = await unstake(amount);
     if(result){
       get_and_display_user_info()
-      get_and_display_pool_info()
+      get_pool_info().then((pool) => show_pool_info(pool))
     }
   }
 }
