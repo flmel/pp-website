@@ -2,6 +2,7 @@ import {initNEAR, login, logout, get_pool_info, get_account,
         stake, unstake, withdraw, raffle, update_prize,
         get_last_winners, floor, interact_external} from './blockchain/pool.js'
 
+const FEES = 0.95
 
 async function get_and_display_user_info(){
   // reset ui
@@ -79,7 +80,7 @@ async function logged_in_flow(){
   }else{
     console.log("Asking pool to update prize")
     update_prize()
-    .then((prize) => $('.pool-prize').text(floor(prize)))
+    .then((prize) => $('.pool-prize').text(floor(prize*FEES)))
   }
 
   if(pool.withdraw_ready){
@@ -93,7 +94,7 @@ async function logged_in_flow(){
 
 function show_pool_info(pool){
   $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
-  $('.pool-prize').text(floor(pool.prize))
+  $('.pool-prize').text(floor(pool.prize*FEES))
 
   $("#time-left").countdown(pool.next_prize_tmstmp, {elapse:true})
   .on('update.countdown', (event) => update_counter(event))

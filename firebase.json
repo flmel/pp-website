@@ -1,10 +1,29 @@
 {
-  "hosting": {
+  "hosting": [{
+    "target": "pool",
     "public": "_site",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  {
+    "target": "dao",
+    "public": "_site",
+
+    "redirects": [ {
+      "source": "/",
+      "destination": "/dao.html",
+      "type": 301
+    } ],
+  
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
+
+]
 }

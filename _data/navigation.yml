@@ -1,9 +1,9 @@
 - name: Pool
   icon: fa-swimming-pool
-  link: /
+  link: https://poolparty.ar
 - name: Vote
   icon: fa-landmark
-  link: /dao.html
+  link: https://dao.poolparty.ar
 - name: Token
   icon: fa-coins
   link: /token.html
