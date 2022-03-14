@@ -36,7 +36,7 @@ export async function stake(_amount){
   let amount = nearApi.utils.format.parseNearAmount(_amount.toString())
   const account = window.walletConnection.account()
   account.functionCall(
-    nearConfig.contractName, 'deposit_and_stake', {}, 200000000000000, amount
+    nearConfig.contractName, 'deposit_and_stake', {}, 80000000000000, amount
   )
 }
 
@@ -44,7 +44,7 @@ export async function unstake(amount){
   amount = floor(amount)
   amount = nearApi.utils.format.parseNearAmount(amount.toString())
   let result = await contract.account.functionCall(
-    nearConfig.contractName, 'unstake', {amount:amount}, 200000000000000, 0
+    nearConfig.contractName, 'unstake', {amount:amount}, 100000000000000, 0
   )
   return nearApi.providers.getTransactionLastResult(result)
 }
@@ -59,7 +59,7 @@ export async function interact_external(){
 
 export async function withdraw(){
   let result = await contract.account.functionCall(
-    nearConfig.contractName, 'withdraw_all', {}, 60000000000000, 0
+    nearConfig.contractName, 'withdraw_all', {}, 20000000000000, 0
   )
 
   return nearApi.providers.getTransactionLastResult(result)

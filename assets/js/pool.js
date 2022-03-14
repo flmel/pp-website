@@ -20,7 +20,10 @@ async function get_and_display_user_info(){
   $('.user-staked').html(user.staked_balance)
   $('.user-unstaked').html(user.unstaked_balance)
 
-  if(user.staked_balance > 0){$('#btn-leave').show()}
+  if(user.staked_balance > 0){
+    $('#exchange-input')[0].setAttribute("max", user.staked_balance)
+    $('#btn-leave').show()
+  }
 
   if(user.unstaked_balance > 0 && !user.available){
     $('#withdraw_btn').hide()
@@ -68,19 +71,20 @@ async function logged_in_flow(){
   $('#account').html(window.walletAccount.accountId)
 
   let pool = await get_pool_info()
+  show_pool_info(pool)
 
   if(pool.next_prize_tmstmp < Date.now() && pool.total_staked > 0){
     console.log("Asking pool to update prize")
-    await update_prize()
+    await ui_update_prize(pool)
 
     console.log("Asking pool to make the raffle")
     await raffle()
 
     pool = await get_pool_info()
+    show_pool_info(pool)
   }else{
     console.log("Asking pool to update prize")
-    update_prize()
-    .then((prize) => $('.pool-prize').text(floor(prize*FEES)))
+    ui_update_prize(pool)
   }
 
   if(pool.withdraw_ready){
@@ -88,8 +92,13 @@ async function logged_in_flow(){
     interact_external()
   }
 
-  show_pool_info(pool)
   get_and_display_user_info()
+}
+
+async function ui_update_prize(pool){
+  const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
+  $('.pool-prize').html(floor(pool.prize*FEES) + sm_spin)
+  update_prize().then((prize) => $('.pool-prize').text(floor(prize*FEES)))
 }
 
 function show_pool_info(pool){
