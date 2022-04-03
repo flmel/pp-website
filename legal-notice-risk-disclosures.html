@@ -1,0 +1,17 @@
+---
+layout: default
+title: Pool Party - Home
+js_file: dao.js
+icon: fa-landmark
+---
+
+<section id="legal" class="legal">
+  <div class="container">
+    <div class="row justify-content-md-center">
+      
+      {% capture my_include %}{% include legal.md %}{% endcapture %}
+      {{ my_include | markdownify }}
+      
+    </div>
+  </div>
+</section>
