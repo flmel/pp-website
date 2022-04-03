@@ -47,7 +47,7 @@ export async function add_proposal(description, kind){
 
   const account = window.walletConnection.account()
   account.functionCall(
-    nearConfig.DAOaddress, 'add_proposal', proposal, 300000000000000, one_near
+    nearConfig.contractName, 'add_proposal', proposal, 300000000000000, one_near
   )
 }
 
@@ -55,7 +55,7 @@ export async function add_proposal(description, kind){
 export async function act_proposal(proposal_id, action){
   const account = window.walletConnection.account()
   let result = await account.functionCall(
-    nearConfig.DAOaddress, 'act_proposal', {id:proposal_id, action:action},
+    nearConfig.contractName, 'act_proposal', {id:proposal_id, action:action},
     180000000000000, 0
   )
   return nearApi.providers.getTransactionLastResult(result)
