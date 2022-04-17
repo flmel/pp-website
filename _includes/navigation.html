@@ -12,7 +12,7 @@
 					<a class="nav-link" href="{{item.link}}"><i class="fas {{item.icon}}"></i>{{ item.name }}</a>
 				{% endfor %}
 				<div  id="navbarNavAltMarkup" class="separator collapse show"></div>
-				<a id="login-btn" class="logged-out nav-link fw-bold" onclick="login()" type="button" href="#">
+				<a id="login-btn" class="logged-out nav-link fw-bold" data-bs-toggle="modal" data-bs-target="#tos" type="button" href="#">
 					<i class="fas {{page.icon}}"></i> Login
 				</a>
 				<div class="dropdown logged-in">

@@ -188,3 +188,4 @@ window.onload = function(){
 
 window.login = login
 window.logout = logout
+$('#accepted')[0].disabled = true
