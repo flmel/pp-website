@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "poolparty-eb89c": {
+      "hosting": {
+        "pool": [
+          "poolparty-eb89c"
+        ],
+        "dao": [
+          "dao-poolparty"
+        ]
+      }
+    }
+  }
+}
