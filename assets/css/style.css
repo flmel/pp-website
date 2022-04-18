@@ -747,6 +747,7 @@ section {
   color: #fff;
   border-radius: 50px;
   min-width: 50px;
+  text-align: center;
 }
 
 .dao-box span {
