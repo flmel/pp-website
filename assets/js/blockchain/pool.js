@@ -80,8 +80,8 @@ export async function get_pool_info(){
   info.total_staked = floor(nearApi.utils.format.formatNearAmount(info.total_staked))
   info.reserve = floor(nearApi.utils.format.formatNearAmount(info.reserve))
   info.prize = floor(nearApi.utils.format.formatNearAmount(info.prize))
-  info.next_raffle = (info.next_raffle/1000000).toFixed(0)
-  info.last_prize_update = (info.last_prize_update/1000000).toFixed(0)
+  info.next_raffle = Number((info.next_raffle/1000000).toFixed(0))
+  info.last_prize_update = Number((info.last_prize_update/1000000).toFixed(0))
   return info
 }
 

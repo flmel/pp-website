@@ -71,7 +71,7 @@ async function logged_in_flow(){
   let pool = await get_pool_info()
   show_pool_info(pool)
 
-  const twelve_hours = 43200
+  const twelve_hours = 21600000
   if(Date.now() > pool.last_prize_update + twelve_hours ){
     // More than 12hs since last update
     console.log("Asking pool to update prize")
@@ -99,9 +99,9 @@ async function logged_in_flow(){
 
 async function ui_update_prize(pool){
   const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
-  const prize = pool.prize*(1-fees*0.01)
+  const prize = pool.prize*(1-pool.fees*0.01)
   $('.pool-prize').html(floor(prize) + sm_spin)
-  update_prize().then((prize) => $('.pool-prize').text(floor(prize)))
+  update_prize().then((prize) => $('.pool-prize').text(floor(prize*(1-pool.fees*0.01))))
 }
 
 function show_pool_info(pool){
