@@ -4,6 +4,3 @@
 - name: Vote
   icon: fa-landmark
   link: https://dao.poolparty.ar
-- name: Token
-  icon: fa-coins
-  link: /token.html

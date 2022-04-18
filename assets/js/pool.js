@@ -2,8 +2,6 @@ import {initNEAR, login, logout, get_pool_info, get_account,
         stake, unstake, withdraw, raffle, update_prize,
         get_last_winners, floor, interact_external} from './blockchain/pool.js'
 
-const FEES = 0.95
-
 async function get_and_display_user_info(){
   // reset ui
   const spin = '<span class="fas fa-sync fa-spin"></span>'
@@ -73,7 +71,19 @@ async function logged_in_flow(){
   let pool = await get_pool_info()
   show_pool_info(pool)
 
-  if(pool.next_prize_tmstmp < Date.now() && pool.total_staked > 0){
+  const twelve_hours = 43200
+  if(Date.now() > pool.last_prize_update + twelve_hours ){
+    // More than 12hs since last update
+    console.log("Asking pool to update prize")
+    await ui_update_prize(pool)
+  
+    if(pool.withdraw_ready){
+      console.log("Interacting with external pool")
+      await interact_external()
+    }
+  }
+
+  if(pool.next_raffle < Date.now() && pool.total_staked > 0){
     console.log("Asking pool to update prize")
     await ui_update_prize(pool)
 
@@ -82,14 +92,6 @@ async function logged_in_flow(){
 
     pool = await get_pool_info()
     show_pool_info(pool)
-  }else{
-    console.log("Asking pool to update prize")
-    ui_update_prize(pool)
-  }
-
-  if(pool.withdraw_ready){
-    console.log("Interacting with external pool")
-    interact_external()
   }
 
   get_and_display_user_info()
@@ -97,15 +99,16 @@ async function logged_in_flow(){
 
 async function ui_update_prize(pool){
   const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
-  $('.pool-prize').html(floor(pool.prize*FEES) + sm_spin)
-  update_prize().then((prize) => $('.pool-prize').text(floor(prize*FEES)))
+  const prize = pool.prize*(1-fees*0.01)
+  $('.pool-prize').html(floor(prize) + sm_spin)
+  update_prize().then((prize) => $('.pool-prize').text(floor(prize)))
 }
 
 function show_pool_info(pool){
   $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
-  $('.pool-prize').text(floor(pool.prize*FEES))
+  $('.pool-prize').text(floor(pool.prize*(1-pool.fees*0.01)))
 
-  $("#time-left").countdown(pool.next_prize_tmstmp, {elapse:true})
+  $("#time-left").countdown(pool.next_raffle, {elapse:true})
   .on('update.countdown', (event) => update_counter(event))
 }
 
