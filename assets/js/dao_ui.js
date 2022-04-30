@@ -142,7 +142,7 @@ class FunctionCall {
 
   get_object_from_DOM() {
     let fields = {}
-    fields['receiver_id'] = getConfig('dao').contractName
+    fields['receiver_id'] = getConfig('pool').contractName
 
     let args = {}
     const value = $(`#${this.param}`)[0].value
