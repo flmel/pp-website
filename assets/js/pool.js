@@ -39,7 +39,7 @@ async function get_and_display_user_info(){
   if(user.staked_balance > 0){
     const pool = await get_pool_info()
     let odds = user.staked_balance / (pool.total_staked - pool.reserve)
-    if(odds < 0.01){ odds = "< 0.01" }else{ odds = odds.toFixed(2) }
+    odds = (odds < 0.01)? "< 0.01" : odds.toFixed(2)
     $('#user-odds').html(odds)
   }else{
     $('#user-odds').html(0)
@@ -72,7 +72,7 @@ async function logged_in_flow(){
   show_pool_info(pool)
 
   const twelve_hours = 21600000
-  if(Date.now() > pool.last_prize_update + twelve_hours ){
+  if(Date.now() > pool.last_prize_update + twelve_hours){
     // More than 12hs since last update
     console.log("Asking pool to update prize")
     await ui_update_prize(pool)
@@ -83,9 +83,15 @@ async function logged_in_flow(){
     }
   }
 
+  if(pool.prize == 0){ 
+    console.log("Asking pool to update prize")
+    await update_prize()
+  }
+
+
   if(pool.next_raffle < Date.now() && pool.total_staked > 0){
     console.log("Asking pool to update prize")
-    await ui_update_prize(pool)
+    await update_prize()
 
     console.log("Asking pool to make the raffle")
     await raffle()
@@ -108,8 +114,9 @@ function show_pool_info(pool){
   $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
   $('.pool-prize').text(floor(pool.prize*(1-pool.fees*0.01)))
 
-  $("#time-left").countdown(pool.next_raffle, {elapse:true})
-  .on('update.countdown', (event) => update_counter(event))
+  $("#time-left").countdown(pool.next_raffle, {})
+  .on('update.countdown', (event) => update_counter(event, false))
+  .on('finish.countdown', (event) => update_counter(event, true));
 }
 
 function show_winners(winners){
@@ -123,12 +130,20 @@ function show_winners(winners){
   }
 }
 
-function update_counter(event){
-  if (event.elapsed) {
-    $("#time-left").text( event.strftime('-%H:%M:%S') );
-  } else {
-    $("#time-left").text( event.strftime('%H:%M:%S') );
+function update_counter(event, ended){
+  if(ended){
+    if(window.walletAccount.accountId){
+      // logged in
+      $("#time-left").text( "Raffling!" );
+      logged_in_flow()
+    }else{
+      $("#time-left").text( "Log in to Raffle!" );
+    }
+  }else{
+    var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+    $("#time-left").text( event.strftime(`${totalHours}:%M:%S`));
   }
+
 }
 
 window.buy_tickets = function(){
@@ -191,4 +206,5 @@ window.onload = function(){
 
 window.login = login
 window.logout = logout
+window.update_prize = update_prize
 $('#accepted')[0].disabled = true
