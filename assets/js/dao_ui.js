@@ -169,7 +169,8 @@ const Transfer = new ProposalKind(
   'Transfer',
   ['Token', 'To', 'Amount'], ['token_id', 'receiver_id', "amount"],
   `Grant <span>receiver_id</span> the requested <span>amount</span> N.`,
-  [getConfig('token').contractName, '', '']
+  //[getConfig('token').contractName, '', '']
+  ['', '', '']
 )
 
 const ChangeMaxRaffle = new FunctionCall(
@@ -211,7 +212,7 @@ const ChangePoolFees = new FunctionCall(
 
 const implemented = {
   'AddMemberToRole': AddMemberToRole,
-  'Transfer': Transfer,
+  //'Transfer': Transfer,
   'FunctionCall': new FunctionCall(),
   'change_max_users': ChangeMaxUsers,
   'change_max_deposit': ChangeMaxDeposit,

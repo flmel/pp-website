@@ -105,14 +105,19 @@ async function logged_in_flow(){
 
 async function ui_update_prize(pool){
   const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
-  const prize = pool.prize*(1-pool.fees*0.01)
+  const prize = pool.prize
   $('.pool-prize').html(floor(prize) + sm_spin)
-  update_prize().then((prize) => $('.pool-prize').text(floor(prize*(1-pool.fees*0.01))))
+  update_prize().then((prize) => $('.pool-prize').text(floor(prize)))
 }
 
-function show_pool_info(pool){
+async function show_pool_info(pool){
+  let data = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd").then(response => response.json()).then(data => data)
+  const n2usd = data['near']['usd']
+
   $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
-  $('.pool-prize').text(floor(pool.prize*(1-pool.fees*0.01)))
+  $('.pool-prize').text("$" + floor(pool.prize*n2usd, 0))
+  $('#prize-near').text(floor(pool.prize, 2))
+  
 
   $("#time-left").countdown(pool.next_raffle, {})
   .on('update.countdown', (event) => update_counter(event, false))
