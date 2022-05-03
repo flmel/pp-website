@@ -39,8 +39,8 @@ async function get_and_display_user_info(){
   if(user.staked_balance > 0){
     const pool = await get_pool_info()
     let odds = user.staked_balance / (pool.total_staked - pool.reserve)
-    odds = (odds < 0.01)? "< 0.01" : odds.toFixed(2)
-    $('#user-odds').html(odds)
+    odds = (odds < 0.01)? "< 1" : (odds*100).toFixed(2)
+    $('#user-odds').html(odds+"%")
   }else{
     $('#user-odds').html(0)
   }
@@ -146,7 +146,8 @@ function update_counter(event, ended){
     }
   }else{
     var totalHours = event.offset.totalDays * 24 + event.offset.hours;
-    $("#time-left").text( event.strftime(`${totalHours}:%M:%S`));
+    var days = event.offset.totalDays
+    $("#time-left").text( event.strftime(`%-d day%!d %H:%M:%S`));
   }
 
 }
