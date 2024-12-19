@@ -1,5 +1,5 @@
-const CONTRACT_NAME = 'pool-v1.poolparty.near'
-const DAO_ADDRESS = 'genesis.dao.poolparty.near'
+const CONTRACT_NAME = 'poolparty2.testnet'
+// const DAO_ADDRESS = 'genesis.dao.poolparty.near'
 // const TOKEN_ADDRESS = 'token.pool-party.mainnet'
 
 export function floor(value, decimals=2){
@@ -14,30 +14,30 @@ export function getConfig(env) {
 
   case 'pool':
     return {
-      networkId: 'mainnet',
-      nodeUrl: 'https://rpc.mainnet.near.org',
-      contractName: CONTRACT_NAME,
-      walletUrl: 'https://wallet.mainnet.near.org',
-      helperUrl: 'https://helper.mainnet.near.org',
-      explorerUrl: 'https://explorer.mainnet.near.org',
+      networkId: 'testnet',
+      nodeUrl: 'https://test.rpc.fastnear.com',
+      contractName: 'poolparty2.testnet',
+      walletUrl: 'https://testnet.mynearwallet.com',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://nearblocks.io',
     }
   case 'dao':
     return {
-      networkId: 'mainnet',
-      nodeUrl: 'https://rpc.mainnet.near.org',
-      contractName: DAO_ADDRESS,
-      walletUrl: 'https://wallet.mainnet.near.org',
-      helperUrl: 'https://helper.mainnet.near.org',
-      explorerUrl: 'https://explorer.mainnet.near.org',
+      networkId: 'testnet',
+      nodeUrl: 'https://test.rpc.fastnear.com',
+      contractName: 'poolparty2.testnet',
+      walletUrl: 'https://testnet.mynearwallet.com',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://nearblocks.io',
     }
   case 'token':
     return {
-      networkId: 'mainnet',
+      networkId: 'testnet',
       nodeUrl: 'https://rpc.mainnet.near.org',
-      contractName: TOKEN_ADDRESS,
-      walletUrl: 'https://wallet.mainnet.near.org',
-      helperUrl: 'https://helper.mainnet.near.org',
-      explorerUrl: 'https://explorer.mainnet.near.org',
+      contractName: 'poolparty2.testnet',
+      walletUrl: 'https://testnet.mynearwallet.com',
+      helperUrl: 'https://helper.testnet.near.org',
+      explorerUrl: 'https://nearblocks.io',
     }
   default:
     throw Error(`Unconfigured environment '${env}'. Can be configured in src/config.js.`)

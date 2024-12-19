@@ -29,3 +29,4 @@ end
 gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
 
 gem "bootstrap", "~> 4.5.0"
+gem 'webrick'
