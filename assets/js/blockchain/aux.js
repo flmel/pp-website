@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'poolparty2.testnet'
+const CONTRACT_NAME = 'v1.poolparty2.testnet'
 // const DAO_ADDRESS = 'genesis.dao.poolparty.near'
 // const TOKEN_ADDRESS = 'token.pool-party.mainnet'
 
@@ -16,7 +16,7 @@ export function getConfig(env) {
     return {
       networkId: 'testnet',
       nodeUrl: 'https://test.rpc.fastnear.com',
-      contractName: 'poolparty2.testnet',
+      contractName: 'v1.poolparty2.testnet',
       walletUrl: 'https://testnet.mynearwallet.com',
       helperUrl: 'https://helper.testnet.near.org',
       explorerUrl: 'https://nearblocks.io',
@@ -25,7 +25,7 @@ export function getConfig(env) {
     return {
       networkId: 'testnet',
       nodeUrl: 'https://test.rpc.fastnear.com',
-      contractName: 'poolparty2.testnet',
+      contractName: 'v1.poolparty2.testnet',
       walletUrl: 'https://testnet.mynearwallet.com',
       helperUrl: 'https://helper.testnet.near.org',
       explorerUrl: 'https://nearblocks.io',
@@ -34,7 +34,7 @@ export function getConfig(env) {
     return {
       networkId: 'testnet',
       nodeUrl: 'https://rpc.mainnet.near.org',
-      contractName: 'poolparty2.testnet',
+      contractName: 'v1.poolparty2.testnet',
       walletUrl: 'https://testnet.mynearwallet.com',
       helperUrl: 'https://helper.testnet.near.org',
       explorerUrl: 'https://nearblocks.io',

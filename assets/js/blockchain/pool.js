@@ -25,7 +25,7 @@ export async function initNEAR() {
   // Initializing our contract APIs by contract name and configuration.
   window.contract = await near.loadContract(
     nearConfig.contractName,
-    {viewMethods: ['get_account', 'get_pool_info', 'get_winners', 'get_to_unstake', 'select_winner', 'get_guardian',
+    {viewMethods: ['get_account', 'get_pool_info', 'get_winners', 'get_to_unstake', 'select_winner', 'get_guardian', 'get_user_info',
                    'get_user_by_id', 'get_user_tickets', 'get_accum_weights', 'number_of_winners'],
      changeMethods: ['unstake', 'deposit_and_stake', 'withdraw_all', 'update_prize', 'raffle', 'interact_external'],
      sender: window.walletAccount.accountId}
@@ -36,7 +36,7 @@ export async function stake(_amount){
   let amount = nearApi.utils.format.parseNearAmount(_amount.toString())
   const account = window.walletConnection.account()
   account.functionCall(
-    nearConfig.contractName, 'deposit_and_stake', {}, 80000000000000, amount
+    nearConfig.contractName, 'deposit_and_stake', {}, 300000000000000, amount
   )
 }
 
@@ -66,22 +66,23 @@ export async function withdraw(){
 }
 
 export async function get_account(account_id){
-  let info = await contract.get_account({account_id})
+  let info = await contract.get_user_info({user: account_id})
 
-  info.staked_balance = floor(nearApi.utils.format.formatNearAmount(info.staked_balance))
-  info.unstaked_balance = floor(nearApi.utils.format.formatNearAmount(info.unstaked_balance))
-  info.available_when = Number(info.available_when)
+  info.staked = floor(nearApi.utils.format.formatNearAmount(info.staked))
 
   return info 
 }
 
 export async function get_pool_info(){
   let info = await contract.get_pool_info()
-  info.total_staked = floor(nearApi.utils.format.formatNearAmount(info.total_staked))
-  info.reserve = floor(nearApi.utils.format.formatNearAmount(info.reserve))
+
+  info.total_staked = floor(nearApi.utils.format.formatNearAmount(info.tickets))
+  info.pool_reserve = floor(nearApi.utils.format.formatNearAmount(info.pool_reserve))
   info.prize = floor(nearApi.utils.format.formatNearAmount(info.prize))
   info.next_raffle = Number((info.next_raffle/1000000).toFixed(0))
   info.last_prize_update = Number((info.last_prize_update/1000000).toFixed(0))
+
+  console.log(info)
   return info
 }
 
@@ -99,8 +100,9 @@ export async function get_last_winners(){
 
 export async function update_prize(){
   let result = await contract.account.functionCall(
-    nearConfig.contractName, 'update_prize', {}, 60000000000000, 0
+    nearConfig.contractName, 'update_prize', {}, 300000000000000, 0
   )
+
   let prize = nearApi.providers.getTransactionLastResult(result)
   return floor(nearApi.utils.format.formatNearAmount(prize))
 }

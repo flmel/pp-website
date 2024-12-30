@@ -15,11 +15,11 @@ async function get_and_display_user_info(){
 
   console.log("Getting user information - VIEW")
   window.user = await get_account(window.walletAccount.accountId)
-  $('.user-staked').html(user.staked_balance)
+  $('.user-staked').html(user.staked)
   $('.user-unstaked').html(user.unstaked_balance)
 
-  if(user.staked_balance > 0){
-    $('#exchange-input')[0].setAttribute("max", user.staked_balance)
+  if(user.staked > 0){
+    $('#exchange-input')[0].setAttribute("max", user.staked)
     $('#btn-leave').show()
   }
 
@@ -38,7 +38,7 @@ async function get_and_display_user_info(){
 
   if(user.staked_balance > 0){
     const pool = await get_pool_info()
-    let odds = user.staked_balance / (pool.total_staked - pool.reserve)
+    let odds = user.staked / (pool.tickets - pool.pool_reserve)
     odds = (odds < 0.01)? "< 1" : (odds*100).toFixed(2)
     $('#user-odds').html(odds+"%")
   }else{
@@ -53,8 +53,8 @@ function flow(){
     logged_in_flow()
   }
 
-  console.log("Getting winners - VIEW")
-  get_last_winners().then((winners) => show_winners(winners))
+  // console.log("Getting winners - VIEW")
+  // get_last_winners().then((winners) => show_winners(winners))
 }
 
 async function not_logged_in_flow(){
@@ -75,7 +75,7 @@ async function logged_in_flow(){
   if(Date.now() > pool.last_prize_update + twelve_hours){
     // More than 12hs since last update
     console.log("Asking pool to update prize")
-    await ui_update_prize(pool)
+    // await ui_update_prize(pool)
   
     if(pool.withdraw_ready){
       console.log("Interacting with external pool")
@@ -83,8 +83,9 @@ async function logged_in_flow(){
     }
   }
 
-  if(pool.prize == 0){ 
+  if(pool.total_staked == 0){ 
     console.log("Asking pool to update prize")
+
     await update_prize()
   }
 
@@ -93,8 +94,8 @@ async function logged_in_flow(){
     console.log("Asking pool to update prize")
     await update_prize()
 
-    console.log("Asking pool to make the raffle")
-    await raffle()
+    // console.log("Asking pool to make the raffle")
+    // await raffle()
 
     pool = await get_pool_info()
     show_pool_info(pool)
@@ -105,7 +106,7 @@ async function logged_in_flow(){
 
 async function ui_update_prize(pool){
   const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
-  const prize = pool.prize
+  const prize = pool.total_staked
   $('.pool-prize').html(floor(prize) + sm_spin)
   update_prize().then((prize) => $('.pool-prize').text(floor(prize)))
 }
@@ -114,8 +115,8 @@ async function show_pool_info(pool){
   let data = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=near&vs_currencies=usd").then(response => response.json()).then(data => data)
   const n2usd = data['near']['usd']
 
-  $('.pool-tickets').text(floor(pool.total_staked - pool.reserve))
-  $('.pool-prize').text("$" + floor(pool.prize*n2usd, 0))
+  $('.pool-tickets').text(floor(pool.total_staked - pool.pool_reserve))
+  $('.pool-prize').text("$" + floor(pool.pize *n2usd, 0))
   $('#prize-near').text(floor(pool.prize, 2))
   
 
