@@ -116,7 +116,7 @@ async function show_pool_info(pool){
   const n2usd = data['near']['usd']
 
   $('.pool-tickets').text(floor(pool.total_staked - pool.pool_reserve))
-  $('.pool-prize').text("$" + floor(pool.pize *n2usd, 0))
+  $('.pool-prize').text("$" + floor(pool.prize*n2usd, 0))
   $('#prize-near').text(floor(pool.prize, 2))
   
 
