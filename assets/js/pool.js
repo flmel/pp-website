@@ -36,7 +36,7 @@ async function get_and_display_user_info(){
     $('#withdraw_btn').show()
   }
 
-  if(user.staked_balance > 0){
+  if(user.staked > 0){
     const pool = await get_pool_info()
     let odds = user.staked / (pool.tickets - pool.pool_reserve)
     odds = (odds < 0.01)? "< 1" : (odds*100).toFixed(2)
@@ -53,8 +53,7 @@ function flow(){
     logged_in_flow()
   }
 
-  // console.log("Getting winners - VIEW")
-  // get_last_winners().then((winners) => show_winners(winners))
+  get_last_winners().then((winners) => show_winners(winners))
 }
 
 async function not_logged_in_flow(){
@@ -74,18 +73,16 @@ async function logged_in_flow(){
   const twelve_hours = 21600000
   if(Date.now() > pool.last_prize_update + twelve_hours){
     // More than 12hs since last update
-    console.log("Asking pool to update prize")
-    // await ui_update_prize(pool)
+    // console.log("Asking pool to update prize")
+    await ui_update_prize(pool)
   
     if(pool.withdraw_ready){
-      console.log("Interacting with external pool")
       await interact_external()
     }
   }
 
   if(pool.total_staked == 0){ 
-    console.log("Asking pool to update prize")
-
+    // console.log("Asking pool to update prize")
     await update_prize()
   }
 
@@ -95,7 +92,7 @@ async function logged_in_flow(){
     await update_prize()
 
     // console.log("Asking pool to make the raffle")
-    // await raffle()
+    await raffle()
 
     pool = await get_pool_info()
     show_pool_info(pool)
@@ -106,7 +103,7 @@ async function logged_in_flow(){
 
 async function ui_update_prize(pool){
   const sm_spin = '<span class="fas fa-sync fa-spin fs-6 float-end"></span>'
-  const prize = pool.total_staked
+  const prize = pool.prize
   $('.pool-prize').html(floor(prize) + sm_spin)
   update_prize().then((prize) => $('.pool-prize').text(floor(prize)))
 }
@@ -119,7 +116,6 @@ async function show_pool_info(pool){
   $('.pool-prize').text("$" + floor(pool.prize*n2usd, 0))
   $('#prize-near').text(floor(pool.prize, 2))
   
-
   $("#time-left").countdown(pool.next_raffle, {})
   .on('update.countdown', (event) => update_counter(event, false))
   .on('finish.countdown', (event) => update_counter(event, true));
@@ -130,8 +126,7 @@ function show_winners(winners){
   for (var i = 0; i < winners.length; i++) {
     $('#winners').append(
       `<li class="row">
-        <div class="col-8 text-start">${winners[i].account_id}</div>
-        <div class="col-4 text-end">${winners[i].amount} N  </div>
+        <div class="col-8 text-start">${winners[i]}</div>
        </li>`);
   }
 }

@@ -26,7 +26,7 @@ export async function initNEAR() {
   window.contract = await near.loadContract(
     nearConfig.contractName,
     {viewMethods: ['get_account', 'get_pool_info', 'get_winners', 'get_to_unstake', 'select_winner', 'get_guardian', 'get_user_info',
-                   'get_user_by_id', 'get_user_tickets', 'get_accum_weights', 'number_of_winners'],
+                   'get_user_by_id', 'get_user_tickets', 'get_accum_weights', 'get_number_of_winners'],
      changeMethods: ['unstake', 'deposit_and_stake', 'withdraw_all', 'update_prize', 'raffle', 'interact_external'],
      sender: window.walletAccount.accountId}
   );
@@ -79,22 +79,18 @@ export async function get_pool_info(){
   info.total_staked = floor(nearApi.utils.format.formatNearAmount(info.tickets))
   info.pool_reserve = floor(nearApi.utils.format.formatNearAmount(info.pool_reserve))
   info.prize = floor(nearApi.utils.format.formatNearAmount(info.prize))
-  info.next_raffle = Number((info.next_raffle/1000000).toFixed(0))
+  info.next_raffle = Number(info.next_raffle)
   info.last_prize_update = Number((info.last_prize_update/1000000).toFixed(0))
 
-  console.log(info)
   return info
 }
 
 export async function get_last_winners(){
-  let imax = await contract.number_of_winners()
+  let imax = await contract.get_number_of_winners()
   let imin = (imax >= 10)? imax - 10: 0
 
   let info = await contract.get_winners({from:imin, until:imax})
 
-  for(let i=0; i<info.length;i++){
-    info[i].amount = floor(nearApi.utils.format.formatNearAmount(info[i].amount))
-  }
   return info 
 }
 
